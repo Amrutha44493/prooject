@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const connectDB = require('./db/connection');
 const authRoutes = require('./routes/auth');
+const projectRoutes = require("./routes/projectRoutes");
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(cors());
 
 // Define Routes
 app.use('/api/auth', authRoutes);
+app.use("/api/projects", projectRoutes);
 
 const PORT = process.env.PORT;
 
