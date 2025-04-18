@@ -15,8 +15,11 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // Define Routes
+const basicRoutes = require('./routes/studentRoutes');
+app.use("/signup", basicRoutes);
 app.use('/api/auth', authRoutes);
 app.use("/api/projects", projectRoutes);
+
 
 const PORT = process.env.PORT;
 
