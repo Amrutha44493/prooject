@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Container, Accordion, AccordionSummary, AccordionDetails, Typography, Card, CardContent, Grid, Button } from '@mui/material';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import StudentNav from './StudentNav';
 
 const StudentDashboard = () => {
   const [projects, setProjects] = useState([]);
@@ -10,13 +11,22 @@ const StudentDashboard = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/projects')
-      .then(response => {
-        setProjects(response.data);
-      })
-      .catch(err => console.error("Error fetching projects:", err));
-  }, []);
+    const token = localStorage.getItem('token');
 
+    axios.get('http://localhost:5000/api/projects', {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    .then(response => {
+      setProjects(response.data);
+    })
+    .catch(err => {
+      console.error("Error fetching projects:", err);
+      alert("Unauthorized access. Please login again.");
+
+    });
+  }, []);
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
@@ -28,11 +38,11 @@ const StudentDashboard = () => {
 
       try {
         const response = await axios.post(
-         'http://localhost:5000/projects/select/${projectId}', 
+          `http://localhost:5000/api/projects/select/${projectId}`,
           {},
           {
             headers: {
-              Authorization: `Bearer ${token} `
+              Authorization:`Bearer ${token}`
             }
           }
         );
@@ -48,7 +58,6 @@ const StudentDashboard = () => {
       }
     }
   };
-
 
   return (
     <div>          <StudentNav/>
