@@ -12,10 +12,11 @@ const StudentDashboard = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-
+  
+    // fetch the project 
     axios.get('http://localhost:5000/api/projects', {
       headers: {
-        Authorization: `Bearer ${token}`
+       'x-auth-token': token
       }
     })
     .then(response => {
@@ -24,9 +25,25 @@ const StudentDashboard = () => {
     .catch(err => {
       console.error("Error fetching projects:", err);
       alert("Unauthorized access. Please login again.");
-
     });
+  
+    // Fetch selected project for this user
+    axios.get('http://localhost:5000/api/projects/student/selected-project', {
+      headers: {
+       'x-auth-token': token
+      }
+    })
+    .then(response => {
+      if (response.data.projectId) {
+        setSelectedProject(response.data.projectId);
+      }
+    })
+    .catch(err => {
+      console.log("No previously selected project");
+    });
+  
   }, []);
+  
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
@@ -42,7 +59,7 @@ const StudentDashboard = () => {
           {},
           {
             headers: {
-              Authorization:`Bearer ${token}`
+             'x-auth-token': token
             }
           }
         );
@@ -52,15 +69,22 @@ const StudentDashboard = () => {
           setSelectedProject(projectId);
           navigate("/ProjectDashboard");
         }
-      } catch (error) {
-        console.error("Project selection failed:", error.response.data.message || error.message);
-        alert("Project selection failed.");
+      }catch (error) {
+        console.error("Project selection failed:", error.response?.data?.message || error.message);
+        
+        if (error.response.data.message === "You have already selected a project.") {
+          alert("You have already selected a project. You can't select another one.");
+        } else {
+          alert(error.response.data.message || "Something went wrong. Please try again.");
+        }
       }
     }
   };
 
+
   return (
-    <div>          <StudentNav/>
+    <div>          
+      <StudentNav/>
 
     <Container sx={{ padding: 3 }}>
 
@@ -264,3 +288,4 @@ const StudentDashboard = () => {
 };
 
 export default StudentDashboard;
+

@@ -5,6 +5,7 @@ import Login from './components/Login';
 import StudentDashboard from './components/StudentDashboard';
 import SignUp from './components/SignUp';
 import Home from './components/Home';
+import ProjectDashboard from './components/ProjectDashboard';
 import StudentNav from './components/StudentNav'
 
 
@@ -15,6 +16,7 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<SignUp/>} />
       <Route path="/dashboard" element={<PrivateRoute><StudentDashboard /></PrivateRoute>} />
+      <Route path="/ProjectDashboard" element={<PrivateRoute><ProjectDashboard /></PrivateRoute>} />
     </Routes>
   );
 }

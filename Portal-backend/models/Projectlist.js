@@ -9,11 +9,6 @@ const projectlistSchema = mongoose.Schema({
     technologies: String,
     features: String,
     objective: String,
-  },
-  selectedBy: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'student',
-    default: null,
   }
 });
 

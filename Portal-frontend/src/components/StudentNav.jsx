@@ -4,9 +4,15 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import { useNavigate } from 'react-router-dom';
 
 
 const StudentNav = () => {
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem('token'); 
+    navigate("/login")
+  };
   return (
    <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -29,7 +35,7 @@ const StudentNav = () => {
                 color: '#1976d2',
                 borderColor: '#fff',
               }
-            }}>Logout</Button>
+            }} onClick={handleLogout}>Logout</Button>
         </Toolbar>
       </AppBar>
     </Box>

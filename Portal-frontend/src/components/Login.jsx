@@ -41,7 +41,11 @@ const Login = () => {
       // Store the token in local storage
       localStorage.setItem('token', res.data.token);
 
-      navigate('/dashboard'); 
+      if (res.data.hasProject) {
+        navigate('/ProjectDashboard'); 
+      } else {
+        navigate('/dashboard'); 
+      }
     } catch (err) {
       if (err.response && err.response.data && err.response.data.msg) {
         setError(err.response.data.msg);

@@ -1,7 +1,8 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const Student = require('../models/studentData');
+const Student = require("../models/studentData")
 const { validationResult } = require('express-validator'); 
+const StudentProject = require('../models/StudentProject');
 
 exports.loginStudent = async (req, res) => {
   const errors = validationResult(req);
@@ -23,6 +24,8 @@ exports.loginStudent = async (req, res) => {
       if (password !== student.password) {
         return res.status(400).json({ msg: 'Invalid credentials' });
       }
+
+      const projectSelection = await StudentProject.findOne({ studentId: student._id });
     const payload = {
       student: {
         id: student.id,
@@ -35,7 +38,7 @@ exports.loginStudent = async (req, res) => {
     { expiresIn: '1h' }, 
     (err, token) => {
      if (err) throw err;
-     res.json({ token });
+     res.json({ token , hasProject: !!projectSelection});
       }
     );
   } catch (err) {
