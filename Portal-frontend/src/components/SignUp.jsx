@@ -12,6 +12,7 @@ const SignUp = () => {
     email: "",
     password: "",
     phone: "",
+    mark: "",
   });
 
   const navigate = useNavigate();
@@ -45,7 +46,9 @@ const SignUp = () => {
       })
       .catch((err) => {
         console.log(err);
-        alert("SignUp failed. Please try again.");
+        const errorMsg =
+          err?.response?.data?.message || "SignUp failed. Please try again.";
+        alert(errorMsg);
       });
   }
 
@@ -94,6 +97,7 @@ const SignUp = () => {
     const value = e.target.value;
     setMarks(value);
     validateMarks(value);
+    setUserForm({ ...userform, mark: e.target.value });
   };
 
   const validatePassword = (value) => {
