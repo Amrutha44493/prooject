@@ -5,21 +5,29 @@ import {
   Tab,
   Typography,
   Paper,
-  Grid
+  Grid,
+  Button
 } from '@mui/material';
-// import Overview from '../components/ProjectDashboard/Overview';
-// import WeeklyMaterials from '../components/ProjectDashboard/WeeklyMaterials';
-// import WeeklySubmission from '../components/ProjectDashboard/WeeklySubmission';
-// import FinalReport from '../components/ProjectDashboard/FinalReport';
-// import VivaVoce from '../components/ProjectDashboard/VivaVoce';
-// import DiscussionForum from '../components/ProjectDashboard/DiscussionForum';
-// import Feedback from '../components/ProjectDashboard/Feedback';
+import WeeklySubmissionFormat from './WeeklySubmission/WeeklySubmissionFormat';
+import AddSubmission from './WeeklySubmission/AddSubmission';
 
 const ProjectDashboard = () => {
+  const today = new Date().getDay();
+  const isWeekend = today === 6 || today === 1;  // true if Saturday or Sunday
+
   const [value, setValue] = useState(0);
+  const [isAddSubmission, setIsAddSubmission] = useState(false); // To toggle between view
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+  };
+
+  const handleAddSubmissionClick = () => {
+    setIsAddSubmission(true); // Set to true when "Add Submission" is clicked
+  };
+
+  const handleBackClick = () => {
+    setIsAddSubmission(false); // Set to false to go back to Weekly Submission format
   };
 
   return (
@@ -40,15 +48,30 @@ const ProjectDashboard = () => {
             <Tab label="Feedback / Marks" />
           </Tabs>
 
-          {/* <Box sx={{ mt: 3 }}>
-            {value === 0 && <Overview />}
-            {value === 1 && <WeeklyMaterials />}
-            {value === 2 && <WeeklySubmission />}
-            {value === 3 && <FinalReport />}
-            {value === 4 && <VivaVoce />}
-            {value === 5 && <DiscussionForum />}
-            {value === 6 && <Feedback />}
-          </Box> */}
+          <Box sx={{ mt: 3 }}>
+            {value === 2 && !isAddSubmission && (
+              <div>
+                <WeeklySubmissionFormat />
+                {isWeekend && (
+                  <Box sx={{ mt: 2 }}>
+                    <Button variant="contained" onClick={handleAddSubmissionClick}>
+                      Add Submission
+                    </Button>
+                  </Box>
+                )}
+              </div>
+            )}
+            {value === 2 && isAddSubmission && (
+              <div>
+                <AddSubmission />
+                <Box sx={{ mt: 2 }}>
+                  <Button variant="outlined" onClick={handleBackClick}>
+                    Back to Weekly Submission
+                  </Button>
+                </Box>
+              </div>
+            )}
+          </Box>
         </Paper>
       </Grid>
     </Grid>
@@ -56,5 +79,3 @@ const ProjectDashboard = () => {
 };
 
 export default ProjectDashboard;
-
-
