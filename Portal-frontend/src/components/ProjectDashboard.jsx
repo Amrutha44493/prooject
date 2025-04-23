@@ -5,6 +5,7 @@ import {
   Tab,
   Typography,
   Paper,
+  Button,
   Grid
 } from '@mui/material';
 import WeeklySubmissionFormat from "./WeeklySubmission/WeeklySubmissionFormat";
@@ -61,6 +62,7 @@ const ProjectDashboard = () => {
           </Tabs>
 
           <Box sx={{ mt: 3 }}>
+          {value === 0 && <Overview />}
             {value === 2 && !isAddSubmission && (
               <div>
                 <WeeklySubmissionFormat />
