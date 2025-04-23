@@ -43,6 +43,7 @@ const AddSubmission = () => {
                 label="Comment"
                 multiline
                 rows={4}
+                required
                 placeholder="Add a comment..."
               />
             </Item>

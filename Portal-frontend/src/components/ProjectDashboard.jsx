@@ -1,19 +1,11 @@
-import React, { useState } from 'react';
-import {
-  Box,
-  Tabs,
-  Tab,
-  Typography,
-  Paper,
-  Grid,
-  Button
-} from '@mui/material';
-import WeeklySubmissionFormat from './WeeklySubmission/WeeklySubmissionFormat';
-import AddSubmission from './WeeklySubmission/AddSubmission';
+import React, { useState } from "react";
+import { Box, Tabs, Tab, Typography, Paper, Grid, Button } from "@mui/material";
+import WeeklySubmissionFormat from "./WeeklySubmission/WeeklySubmissionFormat";
+import AddSubmission from "./WeeklySubmission/AddSubmission";
 
 const ProjectDashboard = () => {
   const today = new Date().getDay();
-  const isWeekend = today === 6 || today === 1;  // true if Saturday or Sunday
+  const isWeekend = today === 2 || today === 3; // true if Saturday or Sunday
 
   const [value, setValue] = useState(0);
   const [isAddSubmission, setIsAddSubmission] = useState(false); // To toggle between view
@@ -38,7 +30,12 @@ const ProjectDashboard = () => {
             Project Dashboard
           </Typography>
 
-          <Tabs value={value} onChange={handleChange} variant="scrollable" scrollButtons="auto">
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            variant="scrollable"
+            scrollButtons="auto"
+          >
             <Tab label="Overview" />
             <Tab label="Weekly Materials" />
             <Tab label="Weekly Submission" />
@@ -54,7 +51,10 @@ const ProjectDashboard = () => {
                 <WeeklySubmissionFormat />
                 {isWeekend && (
                   <Box sx={{ mt: 2 }}>
-                    <Button variant="contained" onClick={handleAddSubmissionClick}>
+                    <Button
+                      variant="contained"
+                      onClick={handleAddSubmissionClick}
+                    >
                       Add Submission
                     </Button>
                   </Box>
@@ -64,7 +64,7 @@ const ProjectDashboard = () => {
             {value === 2 && isAddSubmission && (
               <div>
                 <AddSubmission />
-                <Box sx={{ mt: 2 }}>
+                <Box sx={{ display: "flex", justifyContent: "center", mb:2 }}>
                   <Button variant="outlined" onClick={handleBackClick}>
                     Back to Weekly Submission
                   </Button>
