@@ -4,6 +4,7 @@ const cors = require('cors');
 const connectDB = require('./db/connection');
 const authRoutes = require('./routes/auth');
 const projectRoutes = require("./routes/projectRoutes");
+const pdfRoutes = require('./routes/pdfRoutes');
 
 const app = express();
 
@@ -19,6 +20,7 @@ const basicRoutes = require('./routes/studentRoutes');
 app.use("/signup", basicRoutes);
 app.use('/api/auth', authRoutes);
 app.use("/api/projects", projectRoutes);
+app.use('/api/pdf', pdfRoutes);
 
 
 const PORT = process.env.PORT;

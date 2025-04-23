@@ -7,7 +7,8 @@ import {
   Paper,
   Grid
 } from '@mui/material';
-// import Overview from '../components/ProjectDashboard/Overview';
+import StudentNav from './StudentNav';
+import Overview from '../components/ProjectDashboard/Overview';
 // import WeeklyMaterials from '../components/ProjectDashboard/WeeklyMaterials';
 // import WeeklySubmission from '../components/ProjectDashboard/WeeklySubmission';
 // import FinalReport from '../components/ProjectDashboard/FinalReport';
@@ -23,14 +24,17 @@ const ProjectDashboard = () => {
   };
 
   return (
-    <Grid container justifyContent="center" sx={{ p: 2 }}>
-      <Grid item xs={12} md={10}>
+    <div>
+      <StudentNav/>
+    {/* <Grid container justifyContent="center" sx={{ p: 2 }}>
+      <Grid item xs={12} md={10}> */}
+       <Box sx={{ p: 3 }}>
         <Paper elevation={4} sx={{ p: 3 }}>
           <Typography variant="h4" gutterBottom align="center">
             Project Dashboard
           </Typography>
 
-          <Tabs value={value} onChange={handleChange} variant="scrollable" scrollButtons="auto">
+          <Tabs value={value} onChange={handleChange}  scrollButtons="auto" variant="fullWidth">
             <Tab label="Overview" />
             <Tab label="Weekly Materials" />
             <Tab label="Weekly Submission" />
@@ -40,18 +44,20 @@ const ProjectDashboard = () => {
             <Tab label="Feedback / Marks" />
           </Tabs>
 
-          {/* <Box sx={{ mt: 3 }}>
+          <Box >
             {value === 0 && <Overview />}
-            {value === 1 && <WeeklyMaterials />}
+            {/* {value === 1 && <WeeklyMaterials />}
             {value === 2 && <WeeklySubmission />}
             {value === 3 && <FinalReport />}
             {value === 4 && <VivaVoce />}
             {value === 5 && <DiscussionForum />}
-            {value === 6 && <Feedback />}
-          </Box> */}
+            {value === 6 && <Feedback />} */}
+          </Box>
         </Paper>
-      </Grid>
-    </Grid>
+        </Box>
+      {/* </Grid>
+    </Grid> */}
+    </div>
   );
 };
 
