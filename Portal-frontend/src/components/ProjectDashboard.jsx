@@ -1,7 +1,25 @@
-import React, { useState } from "react";
-import { Box, Tabs, Tab, Typography, Paper, Grid, Button } from "@mui/material";
+import React, { useState } from 'react';
+import {
+  Box,
+  Tabs,
+  Tab,
+  Typography,
+  Paper,
+  Button,
+  Grid
+} from '@mui/material';
 import WeeklySubmissionFormat from "./WeeklySubmission/WeeklySubmissionFormat";
 import AddSubmission from "./WeeklySubmission/AddSubmission";
+import StudentNav from './StudentNav';
+import Overview from '../components/ProjectDashboard/Overview';
+
+// import Overview from '../components/ProjectDashboard/Overview';
+// import WeeklyMaterials from '../components/ProjectDashboard/WeeklyMaterials';
+// import WeeklySubmission from '../components/ProjectDashboard/WeeklySubmission';
+// import FinalReport from '../components/ProjectDashboard/FinalReport';
+// import VivaVoce from '../components/ProjectDashboard/VivaVoce';
+// import DiscussionForum from '../components/ProjectDashboard/DiscussionForum';
+// import Feedback from '../components/ProjectDashboard/Feedback';
 
 const ProjectDashboard = () => {
   const today = new Date().getDay();
@@ -23,19 +41,17 @@ const ProjectDashboard = () => {
   };
 
   return (
-    <Grid container justifyContent="center" sx={{ p: 2 }}>
-      <Grid item xs={12} md={10}>
+    <div>
+      <StudentNav/>
+    {/* <Grid container justifyContent="center" sx={{ p: 2 }}>
+      <Grid item xs={12} md={10}> */}
+       <Box sx={{ p: 3 }}>
         <Paper elevation={4} sx={{ p: 3 }}>
           <Typography variant="h4" gutterBottom align="center">
             Project Dashboard
           </Typography>
 
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            variant="scrollable"
-            scrollButtons="auto"
-          >
+          <Tabs value={value} onChange={handleChange}  scrollButtons="auto" variant="fullWidth">
             <Tab label="Overview" />
             <Tab label="Weekly Materials" />
             <Tab label="Weekly Submission" />
@@ -46,6 +62,7 @@ const ProjectDashboard = () => {
           </Tabs>
 
           <Box sx={{ mt: 3 }}>
+          {value === 0 && <Overview />}
             {value === 2 && !isAddSubmission && (
               <div>
                 <WeeklySubmissionFormat />
@@ -73,8 +90,10 @@ const ProjectDashboard = () => {
             )}
           </Box>
         </Paper>
-      </Grid>
-    </Grid>
+        </Box>
+      {/* </Grid>
+    </Grid> */}
+    </div>
   );
 };
 

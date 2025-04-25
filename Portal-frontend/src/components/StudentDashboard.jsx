@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Accordion, AccordionSummary, AccordionDetails, Typography, Card, CardContent, Grid, Button } from '@mui/material';
+import { Container, Accordion, AccordionSummary, AccordionDetails, Typography, Card, CardContent, Grid, Button,Box } from '@mui/material';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import StudentNav from './StudentNav';
@@ -70,7 +70,7 @@ const StudentDashboard = () => {
           navigate("/ProjectDashboard");
         }
       }catch (error) {
-        console.error("Project selection failed:", error.response?.data?.message || error.message);
+        console.error("Project selection failed:", error.response.data.message || error.message);
         
         if (error.response.data.message === "You have already selected a project.") {
           alert("You have already selected a project. You can't select another one.");
@@ -85,205 +85,130 @@ const StudentDashboard = () => {
   return (
     <div>          
       <StudentNav/>
+      <Container maxWidth="lg" sx={{ py: 6, mt: 2, background: 'linear-gradient(135deg,rgb(75, 72, 72),rgb(163, 147, 147))' ,width:"80%",borderRadius:7}}>
+        <Typography variant="h4" align="center" sx={{ fontWeight: 700, color: 'white', mb: 3 }}>
+          Student Dashboard
+        </Typography>
+        <hr></hr>
+        <Typography variant="h5" align="center" sx={{ color: 'white', fontWeight: 600, mb: 5,mt:3 }}>
+          Explore Available Projects
+        </Typography>
 
-    <Container sx={{ padding: 3 }}>
-
-     <Typography variant="h4"  align="center" sx={{ mb: 4, fontWeight: 'bold', color: '#1565c0' }}  gutterBottom >
-       Student Dashboard
-     </Typography>
-     <hr></hr>
-      <Typography variant="h4" gutterBottom  align="center" sx={{mt:3,mb:2}}>List of Available Projects</Typography>
-      {projects.map((project) => (
-          <Accordion
-            key={project._id}
-            expanded={expanded === project._id}
-            onChange={handleChange(project._id)}
-            sx={{ marginBottom: 2 ,borderRadius: 2,
-              boxShadow: 3,
-              border: '1px solid #ccc',
-              overflow: 'hidden',
-              background: '#f9f9f9',
-              transition: 'all 0.3s ease',
-              '&:hover': {
-                boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
-              }}}
-          >
-            <AccordionSummary
-               expandIcon={
-                <span style={{ fontSize: '1.4rem', fontWeight: 'bold' }}>
-                  {expanded === project._id ? '▾' : '▸'}
-                </span>
-              }
+        {projects.map((project) => (
+          <Box key={project._id} display="flex" justifyContent="center">
+            <Accordion
+              expanded={expanded === project._id}
+              onChange={handleChange(project._id)}
               sx={{
-                '& .MuiAccordionSummary-content': {
-                  justifyContent: 'center',
-                }}}
+                mb: 3,
+                width: '80%',
+                maxWidth: 800,
+                borderRadius: 7,
+                border: '1px solid #cfd8dc',
+                boxShadow: '0 6px 20px rgba(0,0,0,0.08)',
+                backgroundColor: '#e3f2fd',
+                transition: '0.4s ease-in-out',
+                '&:hover': {
+                  boxShadow: '0 8px 25px rgba(0,0,0,0.12)',
+                  transform: 'translateY(-2px)',
+                },
+              }}
             >
-             
-              <Typography variant="h6" sx={{ fontWeight: 'bold'}}>{project.title}</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Grid container spacing={2}>
-                {/* Frontend Technologies Card */}
-                <Grid item xs={2}>
-                  <Card sx={{
-                    height: 100, 
-                    width:270,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    boxShadow: 3,
-                    border: '1px solid #ddd',
-                    borderRadius: 2,
-                    padding: 2,
-                    backgroundColor: '#e0f7fa', 
-                    transition: 'transform 0.3s ease, box-shadow 0.3s ease', 
-                    '&:hover': {
-                      transform: 'scale(1.05)',
-                      boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)', 
-                    }
-                  }}>
-                    <CardContent>
-                      <Typography variant="h6"><strong>Frontend:</strong></Typography>
-                      <Typography>{project.frontend}</Typography>
-                    </CardContent>
-                  </Card>
-                </Grid>
+              <AccordionSummary
+                expandIcon={
+                  <span style={{ fontSize: '1.4rem', fontWeight: 'bold' }}>
+                    {expanded === project._id ? '▾' : '▸'}
+                  </span>
+                }
+                sx={{
+                  '& .MuiAccordionSummary-content': {
+                    justifyContent: 'center',
+                  }
+                }}
+              >
+                <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                  {project.title}
+                </Typography>
+              </AccordionSummary>
 
-                {/* Backend Technologies Card */}
-                <Grid item xs={2}>
-                  <Card sx={{
-                    height: 100, // Adjust height as needed
-                    width:270,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    boxShadow: 3,
-                    border: '1px solid #ddd',
-                    borderRadius: 2,
-                    padding: 2,
-                    backgroundColor: '#e0f7fa', 
-                    transition: 'transform 0.3s ease, box-shadow 0.3s ease', 
-                    '&:hover': {
-                      transform: 'scale(1.05)',
-                      boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)', 
-                    }
-                  }}>
-                    <CardContent>
-                      <Typography variant="h6"><strong>Backend:</strong></Typography>
-                      <Typography>{project.backend}</Typography>
-                    </CardContent>
-                  </Card>
-                </Grid>
+              <AccordionDetails>
+                <Grid container spacing={4} justifyContent="center" >
+                  {[
+                    { label: 'Frontend', value: project.frontend },
+                    { label: 'Backend', value: project.backend },
+                    { label: 'Overview', value: project.fullDesc?.overview },
+                    { label: 'Technologies', value: project.fullDesc?.technologies },
+                    { label: 'Features', value: project.fullDesc?.features },
+                    { label: 'Objective', value: project.fullDesc?.objective },
+                  ].map((item, i) => (
+                    <Grid key={i} item xs={12} sm={6} md={4} lg={2}>
+                      <Card
+                        sx={{
+                          marginTop: 2,
+                          height: 140,
+                          width: 270,
+                          borderRadius: 4,
+                          padding: 2.5,
+                          backgroundColor: '#bbdefb',
+                          boxShadow: 2,
+                          display: 'flex',
+                          flexDirection: 'column',
+                          justifyContent: 'space-between',
+                          transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                          '&:hover': {
+                            transform: 'scale(1.05)',
+                            boxShadow: '0 6px 20px rgba(0,0,0,0.12)',
+                          },
+                        }}
+                      >
+                        <CardContent>
+                          <Typography
+                            variant="subtitle1"
+                            fontWeight={600}
+                            sx={{ mb: 1, color: '#0d47a1', fontSize: '1.1rem' }}
+                          >
+                            {item.label}
+                          </Typography>
+                          <Typography variant="body2" sx={{ color: '#333', fontSize: '1rem' }}>
+                            {item.value}
+                          </Typography>
+                        </CardContent>
+                      </Card>
+                    </Grid>
+                  ))}
 
-                {/* Overview Card */}
-                <Grid item xs={2}>
-                  <Card sx={{
-                    height: 100, // Adjust height as needed
-                    width:400,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    boxShadow: 3,
-                    border: '1px solid #ddd',
-                    borderRadius: 2,
-                    padding: 2,
-                    backgroundColor: '#e0f7fa', 
-                    transition: 'transform 0.3s ease, box-shadow 0.3s ease', 
-                    '&:hover': {
-                      transform: 'scale(1.05)',
-                      boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)', 
-                    }
-                  }}>
-                    <CardContent>
-                      <Typography variant="h6"><strong>Overview:</strong></Typography>
-                      <Typography>{project.fullDesc.overview}</Typography>
-                    </CardContent>
-                  </Card>
+                  <Grid item xs={12} sx={{ textAlign: 'center', mt: 2 }}>
+                    <Button
+                      variant="contained"
+                      size="large"
+                      sx={{
+                        borderRadius: 5,
+                        px: 5,
+                        py: 1.5,
+                        backgroundColor:
+                          selectedProject === project._id ? '#2e7d32' : '#1976d2',
+                        '&:hover': {
+                          backgroundColor:
+                            selectedProject === project._id ? '#1b5e20' : '#1565c0',
+                        },
+                      }}
+                      onClick={() => handleSelect(project._id)}
+                      disabled={
+                        selectedProject !== null &&
+                        selectedProject !== project._id
+                      }
+                    >
+                      {selectedProject === project._id ? 'Selected' : 'Select'}
+                    </Button>
+                  </Grid>
                 </Grid>
-
-                {/* Technologies Card */}
-                <Grid item xs={2}>
-                  <Card sx={{
-                    height: 100, // Adjust height as needed
-                    width:270,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    boxShadow: 3,
-                    border: '1px solid #ddd',
-                    borderRadius: 2,
-                    padding: 2,
-                    backgroundColor: '#e0f7fa', 
-                    transition: 'transform 0.3s ease, box-shadow 0.3s ease', 
-                    '&:hover': {
-                      transform: 'scale(1.05)',
-                      boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)', 
-                    }
-                  }}>
-                    <CardContent>
-                      <Typography variant="h6"><strong>Technologies:</strong></Typography>
-                      <Typography>{project.fullDesc.technologies}</Typography>
-                    </CardContent>
-                  </Card>
-                </Grid>
-
-                {/* Features Card */}
-                <Grid item xs={2}>
-                  <Card sx={{
-                    height: 100, // Adjust height as needed
-                    width:300,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    boxShadow: 3,
-                    border: '1px solid #ddd',
-                    borderRadius: 2,
-                    padding: 2,
-                    backgroundColor: '#e0f7fa', 
-                    transition: 'transform 0.3s ease, box-shadow 0.3s ease', 
-                    '&:hover': {
-                      transform: 'scale(1.05)',
-                      boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)', 
-                    }
-                  }}>
-                    <CardContent>
-                      <Typography variant="h6"><strong>Features:</strong></Typography>
-                      <Typography>{project.fullDesc.features}</Typography>
-                    </CardContent>
-                  </Card>
-                </Grid>
-
-                {/* Objective Card */}
-                <Grid item xs={2}>
-                  <Card sx={{
-                    height: 100, // Adjust height as needed
-                    width:400,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    boxShadow: 3,
-                    border: '1px solid #ddd',
-                    borderRadius: 2,
-                    padding: 2,
-                    backgroundColor: '#e0f7fa', 
-                    transition: 'transform 0.3s ease, box-shadow 0.3s ease', 
-                    '&:hover': {
-                      transform: 'scale(1.05)',
-                      boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)', 
-                    }
-                  }}>
-                    <CardContent>
-                      <Typography variant="h6"><strong>Objective:</strong></Typography>
-                      <Typography>{project.fullDesc.objective}</Typography>
-                    </CardContent>
-                  </Card>
-                </Grid>
-                <Grid item xs={12}> 
-                <Button variant="contained"sx={{ mt: 2 ,mx:60,borderRadius: 5}}  
-                    onClick={() => handleSelect(project._id)}disabled={selectedProject !== null && selectedProject !== project._id}>
-                        {selectedProject === project._id ? 'Selected' : 'Select'}</Button>
-                </Grid>
-                
-              </Grid>
-            </AccordionDetails>
-          </Accordion>
+              </AccordionDetails>
+            </Accordion>
+          </Box>
         ))}
-    </Container></div>
+      </Container>
+
+    </div>
   );
 };
 

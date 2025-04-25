@@ -10,6 +10,7 @@ const projectRoutes = require("./routes/projectRoutes");
 const weeklySubmissionRoutes = require("./routes/weeklySubmissionRoutes");
 const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const pdfRoutes = require('./routes/pdfRoutes');
 
 const app = express();
 
@@ -57,6 +58,7 @@ app.use("/signup", basicRoutes);
 app.use('/api/auth', authRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/weekly-submissions", weeklySubmissionRoutes);
+app.use('/api/pdf', pdfRoutes);
 
 // Project submission routes
 app.post('/api/projects/:projectId/submit', upload.single('file'), async (req, res) => {
