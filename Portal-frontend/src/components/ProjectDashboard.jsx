@@ -5,7 +5,7 @@ import AddSubmission from "./WeeklySubmission/AddSubmission";
 
 const ProjectDashboard = () => {
   const today = new Date().getDay();
-  const isWeekend = today === 2 || today === 3; // true if Saturday or Sunday
+  const isWeekend = today === 3 || today === 3; // true if Saturday or Sunday
 
   const [value, setValue] = useState(0);
   const [isAddSubmission, setIsAddSubmission] = useState(false); // To toggle between view

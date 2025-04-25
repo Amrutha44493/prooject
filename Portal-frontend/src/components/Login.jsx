@@ -38,8 +38,9 @@ const Login = () => {
         config
       );
 
-      // Store the token in local storage
+      // Store the token and student ID in local storage
       localStorage.setItem('token', res.data.token);
+      localStorage.setItem('studentId', res.data.studentId);
 
       if (res.data.hasProject) {
         navigate('/ProjectDashboard'); 
