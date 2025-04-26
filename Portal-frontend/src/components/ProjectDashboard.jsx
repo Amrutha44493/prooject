@@ -16,7 +16,8 @@ import WeeklyMaterials from "./WeeklyMaterials";
 
 const ProjectDashboard = () => {
   const today = new Date().getDay();
-  const isWeekend = today === 3 || today === 3; // true if Saturday or Sunday
+  const isWeekend = today === 0 || today === 6; // true if Saturday or Sunday
+  // const isWeekend = today !== 2 && today !== 3;
 
   const [value, setValue] = useState(0);
   const [isAddSubmission, setIsAddSubmission] = useState(false); // To toggle between view
@@ -66,7 +67,7 @@ const ProjectDashboard = () => {
               <div>
                 <WeeklySubmissionFormat />
                 {isWeekend && (
-                  <Box sx={{ mt: 2 }}>
+                  <Box sx={{ display: 'flex', justifyContent: 'center', mt: 1,mb:2 }}>
                     <Button
                       variant="contained"
                       onClick={handleAddSubmissionClick}
@@ -80,8 +81,8 @@ const ProjectDashboard = () => {
             {value === 2 && isAddSubmission && (
               <div>
                 <AddSubmission />
-                <Box sx={{ display: "flex", justifyContent: "center", mb:2 }}>
-                  <Button variant="outlined" onClick={handleBackClick}>
+                <Box disab sx={{ display: "flex", justifyContent: "center", mb:2 }}>
+                  <Button variant="outlined"  onClick={handleBackClick}>
                     Back to Weekly Submission
                   </Button>
                 </Box>

@@ -16,7 +16,7 @@ const WeeklySubmissionFormat = () => {
   return (
     <Box sx={{ maxWidth: 800, mx: 'auto', p: 3 }}>
       {!showForm ? (
-        <Paper elevation={3} sx={{ p: 3, mb: 3 }}>
+        <Paper elevation={3} sx={{ p: 3, mb: 2 }}>
           <Typography variant="h5" gutterBottom>
             Weekly Submission Report Format
           </Typography>
@@ -51,7 +51,7 @@ const WeeklySubmissionFormat = () => {
             </ListItem>
           </List>
 
-          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+          {/* <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
             <Button
               variant="contained"
               color="primary"
@@ -59,7 +59,7 @@ const WeeklySubmissionFormat = () => {
             >
               Add Submission
             </Button>
-          </Box>
+          </Box> */}
         </Paper>
       ) : (
         <AddSubmission onBack={() => setShowForm(false)} />

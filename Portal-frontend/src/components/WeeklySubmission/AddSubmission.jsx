@@ -161,7 +161,7 @@ const AddSubmission = ({ onBack }) => {
   return (
     <Box sx={{ maxWidth: 800, mx: 'auto', p: 3 }}>
       <Paper elevation={3} sx={{ p: 3 }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+        {/* <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
           <Typography variant="h6">Submit Weekly Report</Typography>
           <Button
             variant="outlined"
@@ -176,7 +176,7 @@ const AddSubmission = ({ onBack }) => {
           >
             Back to Weekly Submission
           </Button>
-        </Box>
+        </Box> */}
 
         <Tabs
           value={submissionType}
