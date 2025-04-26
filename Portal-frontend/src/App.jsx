@@ -6,7 +6,7 @@ import StudentDashboard from "./components/StudentDashboard";
 import SignUp from "./components/SignUp";
 import Home from "./components/Home";
 import ProjectDashboard from "./components/ProjectDashboard";
-import AddSubmission from "./components/WeeklySubmission/AddSubmission"; // ✅ Corrected path
+import AddSubmission from "./components/WeeklySubmission/AddSubmission"; 
 
 function App() {
   return (

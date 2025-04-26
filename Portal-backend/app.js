@@ -19,7 +19,8 @@ const basicRoutes = require('./routes/studentRoutes');
 app.use("/signup", basicRoutes);
 app.use('/api/auth', authRoutes);
 app.use("/api/projects", projectRoutes);
-
+const referenceRoutes = require('./routes/reference');
+app.use('/api/reference', referenceRoutes);
 
 const PORT = process.env.PORT;
 

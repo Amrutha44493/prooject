@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Box, Tabs, Tab, Typography, Paper, Grid, Button } from "@mui/material";
 import WeeklySubmissionFormat from "./WeeklySubmission/WeeklySubmissionFormat";
 import AddSubmission from "./WeeklySubmission/AddSubmission";
+import WeeklyMaterials from "./WeeklyMaterials";
 
 const ProjectDashboard = () => {
   const today = new Date().getDay();
@@ -46,32 +47,37 @@ const ProjectDashboard = () => {
           </Tabs>
 
           <Box sx={{ mt: 3 }}>
-            {value === 2 && !isAddSubmission && (
-              <div>
-                <WeeklySubmissionFormat />
-                {isWeekend && (
-                  <Box sx={{ mt: 2 }}>
-                    <Button
-                      variant="contained"
-                      onClick={handleAddSubmissionClick}
-                    >
-                      Add Submission
-                    </Button>
-                  </Box>
-                )}
-              </div>
-            )}
-            {value === 2 && isAddSubmission && (
-              <div>
-                <AddSubmission />
-                <Box sx={{ display: "flex", justifyContent: "center", mb:2 }}>
-                  <Button variant="outlined" onClick={handleBackClick}>
-                    Back to Weekly Submission
-                  </Button>
-                </Box>
-              </div>
-            )}
-          </Box>
+  {value === 1 && (
+    <div>
+      <WeeklyMaterials />
+    </div>
+  )}
+
+  {value === 2 && !isAddSubmission && (
+    <div>
+      <WeeklySubmissionFormat />
+      {isWeekend && (
+        <Box sx={{ mt: 2 }}>
+          <Button variant="contained" onClick={handleAddSubmissionClick}>
+            Add Submission
+          </Button>
+        </Box>
+      )}
+    </div>
+  )}
+
+  {value === 2 && isAddSubmission && (
+    <div>
+      <AddSubmission />
+      <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
+        <Button variant="outlined" onClick={handleBackClick}>
+          Back to Weekly Submission
+        </Button>
+      </Box>
+    </div>
+  )}
+</Box>
+
         </Paper>
       </Grid>
     </Grid>
