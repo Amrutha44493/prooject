@@ -50,7 +50,7 @@ router.get("/",verifyToken,async (req, res) => {
   }
 });
 
-
+// Route to allow a student to select a project (stores studentID and projectID)
 router.post('/select/:projectId', verifyToken, async (req, res) => {
   try {
     const studentId = req.student.id; 
@@ -72,21 +72,7 @@ router.post('/select/:projectId', verifyToken, async (req, res) => {
   }
 });
 
-// router.get("/student/selected-project", verifyToken, async (req, res) => {
-//   const studentId = req.student.id; 
-
-//   try {
-//     const record = await StudentProject.findOne({ studentId });
-//     if (record) {
-//       res.json({ projectId: record.projectId });
-//     } else {
-//       res.json({ projectId: null });
-//     }
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({ message: "Error checking selected project" });
-//   }
-// });
+// Route to get the selected project ID for the logged-in student
 router.get("/student/selected-project", verifyToken, async (req, res) => {
   try {
     const studentId = req.student.id;
@@ -104,7 +90,19 @@ router.get("/student/selected-project", verifyToken, async (req, res) => {
   }
 });
 
-
+// Route to get full project details using project ID (used in overview.jsx)
+router.get('/:id', async (req, res) => {
+  try {
+    const project = await Project.findById(req.params.id);
+    if (!project) {
+      return res.status(404).json({ msg: 'Project not found' });
+    }
+    res.json(project);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
 
 
 module.exports = router;

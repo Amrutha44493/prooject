@@ -38,7 +38,11 @@ exports.loginStudent = async (req, res) => {
     { expiresIn: '1h' }, 
     (err, token) => {
      if (err) throw err;
-     res.json({ token , hasProject: !!projectSelection});
+     res.json({ 
+       token, 
+       hasProject: !!projectSelection,
+       studentId: student._id 
+     });
       }
     );
   } catch (err) {
@@ -56,3 +60,4 @@ exports.getLoggedInStudent = async (req, res) => {
     res.status(500).send('Server error');
   }
 };
+

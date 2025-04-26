@@ -1,7 +1,12 @@
 const express = require("express");
 const router = express.Router();
-router.use(express.json());
-router.use(express.urlencoded({ extended: true }));
+const { createSubmission, getStudentSubmissions, upload } = require('../controllers/weeklySubmissionController');
+const auth = require('../middleware/auth');
 
-const studentModel = require("../models/studentData");
-const weeklysubmissionModel = require("../models/studentData");
+// Create a new submission (handles both link and file submissions)
+router.post('/submit', auth, upload.single('file'), createSubmission);
+
+// Get all submissions for a student
+router.get('/student/:student_id', auth, getStudentSubmissions);
+
+module.exports = router;
