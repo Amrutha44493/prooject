@@ -4,6 +4,11 @@ const studentSchema = mongoose.Schema({
   email: String,
   password: String,
   phone: String,
+  projectSelected: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Projectlist',
+    default: null
+  },
 });
 
 const studentData = mongoose.model("student", studentSchema); 

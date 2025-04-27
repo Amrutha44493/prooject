@@ -1,12 +1,13 @@
 const express = require("express");
 const router = express.Router();
-const jwt = require("jsonwebtoken")
-router.use(express.json())
-router.use(express.urlencoded({extended:true}))
+const jwt = require("jsonwebtoken");
+router.use(express.json());
+router.use(express.urlencoded({ extended: true }));
+
 const Project = require("../models/Projectlist");
-const StudentProject = require("../models/StudentProject");
+const Student = require("../models/studentData");
 
-
+// Middleware to verify JWT token
 function verifyToken(req, res, next) {
   const token = req.header('x-auth-token');
 
@@ -16,9 +17,7 @@ function verifyToken(req, res, next) {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
     req.student = decoded.student;
-
     next();
   } catch (err) {
     console.error('Token verification failed:', err.message);
@@ -26,11 +25,8 @@ function verifyToken(req, res, next) {
   }
 }
 
-
-
 // Add dummy project
-
-router.post("/add",verifyToken, async (req, res) => {
+router.post("/add", verifyToken, async (req, res) => {
   try {
     const newProject = new Project(req.body);
     const savedProject = await newProject.save();
@@ -40,8 +36,8 @@ router.post("/add",verifyToken, async (req, res) => {
   }
 });
 
-//  Get all projects
-router.get("/",verifyToken,async (req, res) => {
+// Get all projects
+router.get("/", verifyToken, async (req, res) => {
   try {
     const projects = await Project.find();
     res.status(200).json(projects);
@@ -50,20 +46,24 @@ router.get("/",verifyToken,async (req, res) => {
   }
 });
 
-// Route to allow a student to select a project (stores studentID and projectID)
+// Student selects a project (direct update in Student collection)
 router.post('/select/:projectId', verifyToken, async (req, res) => {
   try {
     const studentId = req.student.id; 
     const projectId = req.params.projectId;
 
-    const existing = await StudentProject.findOne({ studentId });
+   const student = await Student.findById(studentId);
 
-    if (existing) {
+    if (!student) {
+      return res.status(404).json({ message: "Student not found" });
+    }
+
+    if (student.projectSelected) {
       return res.status(400).json({ message: "You have already selected a project." });
     }
 
-    const newSelection = new StudentProject({ studentId, projectId });
-    await newSelection.save();
+    student.projectSelected = projectId;
+    await student.save();
 
     res.status(200).json({ message: "Project selected successfully." });
   } catch (err) {
@@ -72,25 +72,25 @@ router.post('/select/:projectId', verifyToken, async (req, res) => {
   }
 });
 
-// Route to get the selected project ID for the logged-in student
+// Get selected project ID for logged-in student
 router.get("/student/selected-project", verifyToken, async (req, res) => {
   try {
     const studentId = req.student.id;
 
-    const selected = await StudentProject.findOne({ studentId });
+    const student = await Student.findById(studentId);
 
-    if (!selected) {
+    if (!student || !student.projectSelected) {
       return res.status(200).json({ projectId: null });
     }
 
-    res.status(200).json({ projectId: selected.projectId });
+    res.status(200).json({ projectId: student.projectSelected });
   } catch (error) {
     console.error("Error fetching selected project:", error);
     res.status(500).json({ msg: "Server error" });
   }
 });
 
-// Route to get full project details using project ID (used in overview.jsx)
+// Get full project details using project ID (used in overview.jsx)
 router.get('/:id', async (req, res) => {
   try {
     const project = await Project.findById(req.params.id);
@@ -103,6 +103,5 @@ router.get('/:id', async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
-
 
 module.exports = router;
