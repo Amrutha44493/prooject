@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const ReferenceMaterial = require('../models/ReferenceMaterial');
+// const ReferenceMaterial=require('../models/studentData')
 
 // Get materials by week
 router.get('/week/:week', async (req, res) => {
