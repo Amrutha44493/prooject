@@ -6,9 +6,11 @@ import StudentNav from "./StudentNav";
 import Overview from "../components/ProjectDashboard/Overview";
 import WeeklyMaterials from "./WeeklyMaterials";
 import VivaVoce from "./VivaVoce";
+import DiscussionForum from "./DiscussionForum";
+import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 const ProjectDashboard = () => {
   const today = new Date().getDay();
-  const isWeekend = today === 6 || today === 0; 
+  const isWeekend = today === 2 || today === 3;
   // const isWeekend = today !== 2 && today !== 3;
 
   const [value, setValue] = useState(0);
@@ -79,6 +81,17 @@ const ProjectDashboard = () => {
                     Add Submission
                   </Button>
                 </Box>
+                <Typography
+                  disabled={isWeekend}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    color: "warning.main",
+                  }}
+                >
+                  <WarningAmberIcon sx={{pr:1}}/>  Weekly submission will be available only
+                  during weekends.
+                </Typography>
                 {/* {isWeekend && (
                   <Box sx={{ display: 'flex', justifyContent: 'center', mt: 1,mb:2, }}>
                     <Button
@@ -105,6 +118,7 @@ const ProjectDashboard = () => {
               </div>
             )}
             {value === 4 && <VivaVoce />}
+            {value === 5 && <DiscussionForum />}
           </Box>
         </Paper>
       </Box>

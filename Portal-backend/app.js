@@ -66,6 +66,7 @@ app.use('/api/pdf', pdfRoutes);
 app.use("/api/viva-voce", vivaVoceRoutes);
 const referenceRoutes = require('./routes/reference');
 app.use('/api/reference', referenceRoutes);
+app.use('/api/forum', queryRoutes);
 const PORT = process.env.PORT;
 
 app.listen(PORT, () => {

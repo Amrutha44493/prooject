@@ -15,6 +15,8 @@ import {
   Snackbar,
   Alert,
 } from "@mui/material";
+import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
+import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
 
 const DiscussionForum = () => {
   const studentId = localStorage.getItem("studentId");
@@ -86,7 +88,7 @@ const DiscussionForum = () => {
     try {
       await axios.post(
         `http://localhost:5000/api/forum/${queryId}/comment`,
-        { text, author: studentId }, // ✅ renamed studentId to author
+        { text, author: studentId },
         { headers: { "x-auth-token": token } }
       );
 
@@ -103,7 +105,7 @@ const DiscussionForum = () => {
     try {
       await axios.put(
         `http://localhost:5000/api/forum/${queryId}/like`,
-        { studentId }, // ✅ send studentId
+        { studentId },
         { headers: { "x-auth-token": token } }
       );
       fetchQueries();
@@ -112,12 +114,12 @@ const DiscussionForum = () => {
       showSnackbar("Failed to like query", "error");
     }
   };
-  
+
   const handleLikeComment = async (queryId, commentId) => {
     try {
       await axios.put(
         `http://localhost:5000/api/forum/${queryId}/comment/${commentId}/like`,
-        { studentId }, // ✅ send studentId
+        { studentId },
         { headers: { "x-auth-token": token } }
       );
       fetchQueries();
@@ -126,7 +128,6 @@ const DiscussionForum = () => {
       showSnackbar("Failed to like comment", "error");
     }
   };
-  
 
   const handleSaveEdit = async (queryId) => {
     try {
@@ -143,8 +144,6 @@ const DiscussionForum = () => {
       showSnackbar("Failed to update query", "error");
     }
   };
-
-
 
   const toggleReplies = (id) => {
     setOpenReplies((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -204,7 +203,9 @@ const DiscussionForum = () => {
       {queries.map((query) => (
         <Paper key={query._id} sx={{ mb: 2, p: 2 }}>
           <Box display="flex" alignItems="center" gap={2}>
-            <Avatar>{query.author?.name?.[0] || "?"}</Avatar>
+            <Avatar sx={{ bgcolor: "#3D1E6D", color: "white", padding:1 }}>
+              {query.author?.name?.[0] || "?"}
+            </Avatar>
             <Box flexGrow={1}>
               {editingQueryId === query._id ? (
                 <>
@@ -273,6 +274,7 @@ const DiscussionForum = () => {
               size="small"
               variant="outlined"
               onClick={() => toggleReplies(query._id)}
+              sx={{ color: "success.main", borderColor: "success.main" }}
             >
               {openReplies[query._id] ? "Hide Replies" : "Show Replies"}
             </Button>
@@ -281,8 +283,9 @@ const DiscussionForum = () => {
               variant="outlined"
               color="primary"
               onClick={() => handleLike(query._id)}
+              // sx={{padding:2}}
             >
-              👍 Like ({query.likes?.length || 0})
+              <ThumbUpOutlinedIcon /> {query.likes?.length || 0}
             </Button>
             {query.author?._id === studentId && (
               <Button
@@ -297,7 +300,7 @@ const DiscussionForum = () => {
                   });
                 }}
               >
-                ✏️ Edit
+                <ModeEditOutlineOutlinedIcon /> Edit
               </Button>
             )}
           </Box>
@@ -313,98 +316,63 @@ const DiscussionForum = () => {
                     alignItems="flex-start"
                     sx={{ flexDirection: "column", alignItems: "stretch" }}
                   >
-                    <Box display="flex" alignItems="center">
-                      <ListItemAvatar>
-                        <Avatar>{comment.author?.name?.[0] || "?"}</Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary={
-                          isEditing ? (
-                            <TextField
-                              fullWidth
-                              value={editCommentText[comment._id] || ""}
-                              onChange={(e) =>
-                                setEditCommentText((prev) => ({
-                                  ...prev,
-                                  [comment._id]: e.target.value,
-                                }))
-                              }
-                              size="small"
-                            />
-                          ) : (
-                            comment.text
-                          )
-                        }
-                        secondary={`by ${
-                          comment.author?.name || "Unknown"
-                        } on ${new Date(comment.createdAt).toLocaleTimeString(
-                          [],
-                          {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                            hour12: true,
-                          }
-                        )}`}
-                      />
-                    </Box>
-
-                    <Box display="flex" justifyContent="space-between" mt={1}>
-                      <Button
-                        size="small"
-                        variant="text"
-                        onClick={() =>
-                          handleLikeComment(query._id, comment._id)
-                        }
-                      >
-                        👍 Like ({comment.likes?.length || 0})
-                      </Button>
-
-                      {/* {comment.author?._id === studentId && (
-                        isEditing ? (
-                          <>
-                            <Button
-                              size="small"
-                              onClick={() =>
-                                handleSaveCommentEdit(query._id, comment._id)
-                              }
-                            >
-                              Save
-                            </Button>
-                            <Button
-                              size="small"
-                              onClick={() => {
-                                setEditingComment((prev) => ({
-                                  ...prev,
-                                  [comment._id]: false,
-                                }));
-                                setEditCommentText((prev) => ({
-                                  ...prev,
-                                  [comment._id]: "",
-                                }));
-                              }}
-                            >
-                              Cancel
-                            </Button>
-                          </>
-                        ) : (
-                          <Button
-                            size="small"
-                            onClick={() => {
-                              setEditingComment((prev) => ({
-                                ...prev,
-                                [comment._id]: true,
-                              }));
-                              setEditCommentText((prev) => ({
-                                ...prev,
-                                [comment._id]: comment.text,
-                              }));
-                            }}
+                    <Paper sx={{ padding: 1 }}>
+                      <Box display="flex" alignItems="center">
+                        <ListItemAvatar>
+                          <Avatar
+                            sx={{ bgcolor: "success.main", color: "white" }}
                           >
-                             Edit
-                          </Button>
-                        )
-                      )} */}
-                    </Box>
+                            {comment.author?.name?.[0] || "?"}
+                          </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={
+                            isEditing ? (
+                              <TextField
+                                // fullWidth
+                                // value={editCommentText[comment._id] || ""}
+                                // onChange={(e) =>
+                                //   setEditCommentText((prev) => ({
+                                //     ...prev,
+                                //     [comment._id]: e.target.value,
+                                //   }))
+                                // }
+                                size="small"
+                              />
+                            ) : (
+                              comment.text
+                            )
+                          }
+                          secondary={`by ${
+                            comment.author?.name || "Unknown"
+                          } on ${new Date(comment.createdAt).toLocaleTimeString(
+                            [],
+                            {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                              hour12: true,
+                            }
+                          )}`}
+                        />
+                      </Box>
+
+                      <Box
+                        display="flex"
+                        justifyContent="space-between"
+                        mt={1}
+                        sx={{ ml: 5 }}
+                      >
+                        <Button
+                          size="small"
+                          variant="text"
+                          onClick={() =>
+                            handleLikeComment(query._id, comment._id)
+                          }
+                        >
+                          <ThumbUpOutlinedIcon /> {comment.likes?.length || 0}
+                        </Button>
+                      </Box>
+                    </Paper>
                   </ListItem>
                 );
               })}
