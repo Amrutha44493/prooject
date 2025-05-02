@@ -5,8 +5,7 @@ import AddSubmission from "./WeeklySubmission/AddSubmission";
 import StudentNav from "./StudentNav";
 import Overview from "../components/ProjectDashboard/Overview";
 import WeeklyMaterials from "./WeeklyMaterials";
-import DiscussionForum from "./DiscussionForum";
-
+import VivaVoce from "./VivaVoce";
 const ProjectDashboard = () => {
   const today = new Date().getDay();
   const isWeekend = today === 6 || today === 0; 
@@ -105,7 +104,7 @@ const ProjectDashboard = () => {
                 </Box>
               </div>
             )}
-            {value === 5 && <DiscussionForum />}
+            {value === 4 && <VivaVoce />}
           </Box>
         </Paper>
       </Box>

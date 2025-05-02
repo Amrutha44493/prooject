@@ -12,6 +12,7 @@ const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const pdfRoutes = require("./routes/pdfRoutes");
 const queryRoutes = require("./routes/queryRoutes");
+const vivaVoceRoutes = require("./routes/vivaVoceRoutes");
 
 const app = express();
 
@@ -61,10 +62,12 @@ app.use("/signup", basicRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/weekly-submissions", weeklySubmissionRoutes);
-app.use("/api/pdf", pdfRoutes);
-const referenceRoutes = require("./routes/reference");
-app.use("/api/reference", referenceRoutes);
-app.use("/api/forum", queryRoutes);
+app.use('/api/pdf', pdfRoutes);
+app.use("/api/viva-voce", vivaVoceRoutes);
+const referenceRoutes = require('./routes/reference');
+app.use('/api/reference', referenceRoutes);
 const PORT = process.env.PORT;
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
