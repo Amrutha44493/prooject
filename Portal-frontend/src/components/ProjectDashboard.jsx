@@ -5,6 +5,7 @@ import AddSubmission from "./WeeklySubmission/AddSubmission";
 import StudentNav from "./StudentNav";
 import Overview from "../components/ProjectDashboard/Overview";
 import WeeklyMaterials from "./WeeklyMaterials";
+import DiscussionForum from "./DiscussionForum";
 
 const ProjectDashboard = () => {
   const today = new Date().getDay();
@@ -104,6 +105,7 @@ const ProjectDashboard = () => {
                 </Box>
               </div>
             )}
+            {value === 5 && <DiscussionForum />}
           </Box>
         </Paper>
       </Box>
