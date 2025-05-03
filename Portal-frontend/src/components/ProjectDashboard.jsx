@@ -8,6 +8,7 @@ import WeeklyMaterials from "./WeeklyMaterials";
 import VivaVoce from "./VivaVoce";
 import FinalProjectSubmission from "./FinalProjectSubmission"; // Import the component
 import { useParams } from 'react-router-dom'; // Import useParams
+import FeedbackMark from "./FeedbackMark";
 
 import DiscussionForum from "./DiscussionForum";
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
@@ -91,6 +92,17 @@ const ProjectDashboard = () => {
                                         Add Submission
                                     </Button>
                                 </Box>
+                                <Typography
+                  disabled={isWeekend}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    color: "warning.main",
+                  }}
+                >
+                  <WarningAmberIcon sx={{pr:1}}/>  Weekly submission will be available only
+                  during weekends.
+                </Typography>
                             </div>
                         )}
                         {value === 2 && isAddSubmission && (
@@ -110,75 +122,76 @@ const ProjectDashboard = () => {
                             <FinalProjectSubmission />
                         )} {/* Render FinalProjectSubmission without passing projectId */}
                         {value === 4 && <VivaVoce />}
+                        {value === 5 && <DiscussionForum />}
+                        {value === 6 && <FeedbackMark />} 
+                       
                     </Box>
                 </Paper>
             </Box>
         </div>
     );
-            {value === 2 && !isAddSubmission && (
-              <div>
-                <WeeklySubmissionFormat />
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    mt: 1,
-                    mb: 2,
-                  }}
-                >
-                  <Button
-                    variant="contained"
-                    disabled={!isWeekend}
-                    onClick={handleAddSubmissionClick}
-                  >
-                    Add Submission
-                  </Button>
-                </Box>
-                <Typography
-                  disabled={isWeekend}
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    color: "warning.main",
-                  }}
-                >
-                  <WarningAmberIcon sx={{pr:1}}/>  Weekly submission will be available only
-                  during weekends.
-                </Typography>
-                {/* {isWeekend && (
-                  <Box sx={{ display: 'flex', justifyContent: 'center', mt: 1,mb:2, }}>
-                    <Button
-                      variant="contained"
-                      onClick={handleAddSubmissionClick}
-                    >
-                      Add Submission
-                    </Button>
-                  </Box>
-                )} */}
-              </div>
-            )}
-            {value === 2 && isAddSubmission && (
-              <div>
-                <AddSubmission />
-                <Box
-                  disabled={!isWeekend}
-                  sx={{ display: "flex", justifyContent: "center", mb: 2 }}
-                >
-                  <Button variant="outlined" onClick={handleBackClick}>
-                    Back to Weekly Submission
-                  </Button>
-                </Box>
-              </div>
-            )}
-            {value === 4 && <VivaVoce />}
-            {value === 5 && <DiscussionForum />}
-          </Box>
-        </Paper>
-      </Box>
-      {/* </Grid>
-    </Grid> */}
-    </div>
-  );
+  //           {value === 2 && !isAddSubmission && (
+  //             <div>
+  //               <WeeklySubmissionFormat />
+  //               <Box
+  //                 sx={{
+  //                   display: "flex",
+  //                   justifyContent: "center",
+  //                   mt: 1,
+  //                   mb: 2,
+  //                 }}
+  //               >
+  //                 <Button
+  //                   variant="contained"
+  //                   disabled={!isWeekend}
+  //                   onClick={handleAddSubmissionClick}
+  //                 >
+  //                   Add Submission
+  //                 </Button>
+  //               </Box>
+  //               <Typography
+  //                 disabled={isWeekend}
+  //                 sx={{
+  //                   display: "flex",
+  //                   justifyContent: "center",
+  //                   color: "warning.main",
+  //                 }}
+  //               >
+  //                 <WarningAmberIcon sx={{pr:1}}/>  Weekly submission will be available only
+  //                 during weekends.
+  //               </Typography>
+  //               {/* {isWeekend && (
+  //                 <Box sx={{ display: 'flex', justifyContent: 'center', mt: 1,mb:2, }}>
+  //                   <Button
+  //                     variant="contained"
+  //                     onClick={handleAddSubmissionClick}
+  //                   >
+  //                     Add Submission
+  //                   </Button>
+  //                 </Box>
+  //               )} */}
+  //             </div>
+  //           )}
+  //           {value === 2 && isAddSubmission && (
+  //             <div>
+  //               <AddSubmission />
+  //               <Box
+  //                 disabled={!isWeekend}
+  //                 sx={{ display: "flex", justifyContent: "center", mb: 2 }}
+  //               >
+  //                 <Button variant="outlined" onClick={handleBackClick}>
+  //                   Back to Weekly Submission
+  //                 </Button>
+  //               </Box>
+  //             </div>
+  //           )}
+  //           {value === 4 && <VivaVoce />}
+  //           {value === 5 && <DiscussionForum />}
+  //         </Box>
+  //     {/* </Grid>
+  //   </Grid> */}
+  //   </div>
+  // );
 };
 
 export default ProjectDashboard;

@@ -13,10 +13,8 @@ const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const pdfRoutes = require("./routes/pdfRoutes");
 const queryRoutes = require("./routes/queryRoutes");
 const vivaVoceRoutes = require("./routes/vivaVoceRoutes");
-const cloudinary = require('cloudinary').v2;
-const { CloudinaryStorage } = require('multer-storage-cloudinary');
-const pdfRoutes = require('./routes/pdfRoutes');
 const finalProjectRoutes = require('./routes/finalProjectRoutes'); // Import the final project routes
+const studentSubmission = require("./routes/studentSubmission")
 
 const app = express();
 
@@ -40,7 +38,7 @@ const weeklyStorage = new CloudinaryStorage({
 });
 
 const upload = multer({
-  storage: storage,
+  storage: weeklyStorage,
   limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
   fileFilter: function (req, file, cb) {
     const filetypes = /pdf|doc|docx|zip|rar/;
@@ -54,8 +52,7 @@ const upload = multer({
     }
     cb(new Error("Only PDF, DOC, DOCX, ZIP, and RAR files are allowed"));
   },
-    cb(new Error('Only PDF, DOC, DOCX, ZIP, and RAR files are allowed for weekly submissions'));
-  }
+    
 });
 
 // Configure Multer with Cloudinary storage for final reports
@@ -100,11 +97,9 @@ app.use('/api/reference', referenceRoutes);
 app.use('/api/final-reports', finalProjectRoutes); // Mount the final project routes
 const PORT = process.env.PORT || 5000;
 app.use('/api/forum', queryRoutes);
-const PORT = process.env.PORT;
+app.use("/api", studentSubmission);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
-// Export the finalReportUpload middleware if you need to use it in your finalProjectRoutes
-module.exports = { finalReportUpload };

@@ -27,22 +27,59 @@ const weeklySubmissionSchema = mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  marks: {
+    type: Number,
+    default: 0,
+  },
+  mentorComment: {
+    type: String,
+    default: "",
+  },
 });
 
-const projectReportSchema = mongoose.Schema({
-  cloudinaryUrl: {
+// const projectReportSchema = mongoose.Schema({
+//   cloudinaryUrl: {
+//     type: String,
+//     required: true,
+//   },
+//   fileName: {
+//     type: String,
+//     required: true,
+//   },
+//   createdAt: {
+//     type: Date,
+//     default: Date.now,
+//   },
+// });
+const finalProjectReport = mongoose.Schema({
+  submissionType: {
     type: String,
-    required: true,
+    enum: ["link", "file"],
   },
-  fileName: {
-    type: String,
-    required: true,
-  },
-  createdAt: {
+  link: String,
+  cloudinaryUrl: String,
+  comments: String,
+  submissionDate: {
     type: Date,
-    default: Date.now,
+    default: null,
   },
-});
+  submissionStatus: { 
+    type: Boolean,
+    default: false,
+  },
+  marks: {
+    type: Number,
+    default: 0,
+  },
+  mentorComment: {
+    type: String,
+    default: "",
+  },
+  projectId: { 
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Projectlist',
+  }
+})
 
 const vivaVoceSchema = mongoose.Schema({
   cloudinaryUrl: {
@@ -56,6 +93,14 @@ const vivaVoceSchema = mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now,
+  },
+  marks: {
+    type: Number,
+    default: 0,
+  },
+  mentorComment: {
+    type: String,
+    default: "",
   },
 });
 
@@ -72,35 +117,37 @@ const studentSchema = mongoose.Schema({
   weeklySubmissionData: [
     weeklySubmissionSchema
   ],
-  finalProjectReport: {
-    submissionType: {
-      type: String,
-      enum: ["link", "file"],
-    },
-    link: String,
-    cloudinaryUrl: String,
-    comments: String,
-    submissionDate: {
-      type: Date,
-      default: null,
-    },
-    submissionStatus: { 
-      type: Boolean,
-      default: false,
-    },
-    marks: {
-      type: Number,
-      default: null,
-    },
-    feedback: {
-      type: String,
-      default: null,
-    },
-    projectId: { 
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Projectlist',
-    }
-  }
+  // finalProjectReport: {
+  //   submissionType: {
+  //     type: String,
+  //     enum: ["link", "file"],
+  //   },
+  //   link: String,
+  //   cloudinaryUrl: String,
+  //   comments: String,
+  //   submissionDate: {
+  //     type: Date,
+  //     default: null,
+  //   },
+  //   submissionStatus: { 
+  //     type: Boolean,
+  //     default: false,
+  //   },
+  //   marks: {
+  //     type: Number,
+  //     default: 0,
+  //   },
+  //   mentorComment: {
+  //     type: String,
+  //     default: "",
+  //   },
+  //   projectId: { 
+  //     type: mongoose.Schema.Types.ObjectId,
+  //     ref: 'Projectlist',
+  //   }
+  // },
+  finalProjectReport :finalProjectReport,
+vivaVoce: vivaVoceSchema
   
 });
 
