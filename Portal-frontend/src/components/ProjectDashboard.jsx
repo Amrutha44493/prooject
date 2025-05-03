@@ -10,7 +10,7 @@ import DiscussionForum from "./DiscussionForum";
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 const ProjectDashboard = () => {
   const today = new Date().getDay();
-  const isWeekend = today === 2 || today === 3;
+  const isWeekend = today === 6 || today === 0;
   // const isWeekend = today !== 2 && today !== 3;
 
   const [value, setValue] = useState(0);
