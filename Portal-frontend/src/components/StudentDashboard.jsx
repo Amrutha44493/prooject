@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Accordion, AccordionSummary, AccordionDetails, Typography, Card, CardContent, Grid, Button,Box } from '@mui/material';
+import { Container, Accordion, AccordionSummary, AccordionDetails, Typography, Card, CardContent, Grid, Button, Box } from '@mui/material';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import StudentNav from './StudentNav';
@@ -12,38 +12,38 @@ const StudentDashboard = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-  
-    // fetch the project 
+
+    // Fetch all projects
     axios.get('http://localhost:5000/api/projects', {
       headers: {
-       'x-auth-token': token
+        'x-auth-token': token
       }
     })
-    .then(response => {
-      setProjects(response.data);
-    })
-    .catch(err => {
-      console.error("Error fetching projects:", err);
-      alert("Unauthorized access. Please login again.");
-    });
-  
+      .then(response => {
+        setProjects(response.data);
+      })
+      .catch(err => {
+        console.error("Error fetching projects:", err);
+        alert("Unauthorized access. Please login again.");
+      });
+
     // Fetch selected project for this user
     axios.get('http://localhost:5000/api/projects/student/selected-project', {
       headers: {
-       'x-auth-token': token
+        'x-auth-token': token
       }
     })
-    .then(response => {
-      if (response.data.projectId) {
-        setSelectedProject(response.data.projectId);
-      }
-    })
-    .catch(err => {
-      console.log("No previously selected project");
-    });
-  
+      .then(response => {
+        if (response.data.projectId) {
+          setSelectedProject(response.data.projectId);
+        }
+      })
+      .catch(err => {
+        console.log("No previously selected project");
+      });
+
   }, []);
-  
+
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
@@ -51,7 +51,7 @@ const StudentDashboard = () => {
   const handleSelect = async (projectId) => {
     const confirmSelection = window.confirm("Are you sure you want to select this project? You won't be able to select any other project later.");
     if (confirmSelection) {
-      const token = localStorage.getItem('token'); 
+      const token = localStorage.getItem('token');
 
       try {
         const response = await axios.post(
@@ -59,7 +59,7 @@ const StudentDashboard = () => {
           {},
           {
             headers: {
-             'x-auth-token': token
+              'x-auth-token': token
             }
           }
         );
@@ -67,30 +67,29 @@ const StudentDashboard = () => {
         if (response.status === 200) {
           alert("Project selected successfully!");
           setSelectedProject(projectId);
-          navigate("/ProjectDashboard");
+          navigate(`/ProjectDashboard`); // Ensure projectId is in the route
         }
-      }catch (error) {
-        console.error("Project selection failed:", error.response.data.message || error.message);
-        
-        if (error.response.data.message === "You have already selected a project.") {
+      } catch (error) {
+        console.error("Project selection failed:", error.response?.data?.message || error.message);
+
+        if (error.response?.data?.message === "You have already selected a project.") {
           alert("You have already selected a project. You can't select another one.");
         } else {
-          alert(error.response.data.message || "Something went wrong. Please try again.");
+          alert(error.response?.data?.message || "Something went wrong. Please try again.");
         }
       }
     }
   };
 
-
   return (
-    <div>          
-      <StudentNav/>
-      <Container maxWidth="lg" sx={{ py: 6, mt: 2, background: 'linear-gradient(135deg,rgb(75, 72, 72),rgb(163, 147, 147))' ,width:"80%",borderRadius:7}}>
+    <div>
+      <StudentNav />
+      <Container maxWidth="lg" sx={{ py: 6, mt: 2, background: 'linear-gradient(135deg,rgb(75, 72, 72),rgb(163, 147, 147))', width: "80%", borderRadius: 7 }}>
         <Typography variant="h4" align="center" sx={{ fontWeight: 700, color: 'white', mb: 3 }}>
           Student Dashboard
         </Typography>
         <hr></hr>
-        <Typography variant="h5" align="center" sx={{ color: 'white', fontWeight: 600, mb: 5,mt:3 }}>
+        <Typography variant="h5" align="center" sx={{ color: 'white', fontWeight: 600, mb: 5, mt: 3 }}>
           Explore Available Projects
         </Typography>
 
@@ -213,4 +212,3 @@ const StudentDashboard = () => {
 };
 
 export default StudentDashboard;
-

@@ -72,15 +72,38 @@ const studentSchema = mongoose.Schema({
   weeklySubmissionData: [
     weeklySubmissionSchema
   ],
-  projectReport: {
-    type: projectReportSchema,
-    default: null
-  },
-  vivaVoce: {
-    type: vivaVoceSchema,
-    default: null
+  finalProjectReport: {
+    submissionType: {
+      type: String,
+      enum: ["link", "file"],
+    },
+    link: String,
+    cloudinaryUrl: String,
+    comments: String,
+    submissionDate: {
+      type: Date,
+      default: null,
+    },
+    submissionStatus: { 
+      type: Boolean,
+      default: false,
+    },
+    marks: {
+      type: Number,
+      default: null,
+    },
+    feedback: {
+      type: String,
+      default: null,
+    },
+    projectId: { 
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Projectlist',
+    }
   }
+  
 });
+
 
 const studentData = mongoose.model("student", studentSchema);
 module.exports = studentData;

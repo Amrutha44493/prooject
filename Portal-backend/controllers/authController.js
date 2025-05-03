@@ -26,7 +26,6 @@ exports.loginStudent = async (req, res) => {
       }
 
       const hasProject = student.projectSelected !== null;
-      // const projectSelection = await StudentProject.findOne({ studentId: student._id });
     const payload = {
       student: {
         id: student.id,
@@ -54,12 +53,11 @@ exports.loginStudent = async (req, res) => {
 
 exports.getLoggedInStudent = async (req, res) => {
   try {
-    const student = await Student.findById(req.student.id).select('-password'); 
-    res.json(student);
+    const student = await Student.findById(req.student.id).select('-password');
+    res.json({ ...student.toObject(), studentId: student._id });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server error');
   }
 };
-
 

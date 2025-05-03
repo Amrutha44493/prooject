@@ -10,6 +10,11 @@ const projectlistSchema = mongoose.Schema({
     features: String,
     objective: String,
   }
+  ,
+  endDate: {
+    type: Date,
+    required: true,
+  },
 });
 
 const projectlist = mongoose.model("Projectlist", projectlistSchema);
