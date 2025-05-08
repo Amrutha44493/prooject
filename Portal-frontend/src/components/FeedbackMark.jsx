@@ -49,7 +49,7 @@ const FeedbackMarks = () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          `http://localhost:5000/api/getSubmission/${studentId}`,
+          `http://localhost:5000/api/submit/getSubmission/${studentId}`,
           {
             headers: {
               "x-auth-token": token,
