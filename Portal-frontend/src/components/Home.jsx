@@ -150,7 +150,6 @@ const Home = () => {
           <Button
             component="a"
             href="/login"
-            variant="contained"
             sx={{
               backgroundColor: 'white',
               color: '#1976d2',

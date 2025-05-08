@@ -4,7 +4,7 @@ router.use(express.json());
 router.use(express.urlencoded({ extended: true }));
 
 const studentModel = require("../models/studentData");
-const marksModel = require("../models/marksData");
+// const marksModel = require("../models/marksData");
 
 router.post("/", async (req, res) => {
   try {
@@ -12,10 +12,11 @@ router.post("/", async (req, res) => {
 
     console.log("Received data:", req.body); 
 
-    const studentRecord = await marksModel.findOne({ email });
+    // Look for unregistered (dummy) student with this email
+    const studentRecord = await studentModel.findOne({ email, isRegistered: false });
 
     if (!studentRecord) {
-      return res.status(400).json({ message: "Email not authorized for signup" });
+      return res.status(400).json({ message: "Email not authorized or already registered" });
     }
 
     if (parseInt(studentRecord.mark) < 40) {
@@ -25,9 +26,14 @@ router.post("/", async (req, res) => {
     if (parseInt(studentRecord.mark) !== parseInt(mark)) {
       return res.status(400).json({ message: "Entered marks do not match our records" });
     }
-    
-    const newUser = new studentModel({ name, email, phone, password, mark });
-    await newUser.save();
+
+    // Update the dummy record with real signup details
+    studentRecord.name = name;
+    studentRecord.phone = phone;
+    studentRecord.password = password; // hash if needed
+    studentRecord.isRegistered = true;
+
+    await studentRecord.save();
 
     res.status(200).json({ message: "Signup successful" });
   } catch (error) {
@@ -35,4 +41,5 @@ router.post("/", async (req, res) => {
     res.status(500).json({ message: "Signup Failed", error: error.message });
   }
 });
+
 module.exports = router;
