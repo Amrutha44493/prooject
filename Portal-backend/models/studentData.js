@@ -63,7 +63,7 @@ const finalProjectReport = mongoose.Schema({
     type: Date,
     default: null,
   },
-  submissionStatus: { 
+  submissionStatus: {
     type: Boolean,
     default: false,
   },
@@ -75,11 +75,11 @@ const finalProjectReport = mongoose.Schema({
     type: String,
     default: "",
   },
-  projectId: { 
+  projectId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Projectlist',
-  }
-})
+    ref: "Projectlist",
+  },
+});
 
 const vivaVoceSchema = mongoose.Schema({
   cloudinaryUrl: {
@@ -109,14 +109,14 @@ const studentSchema = mongoose.Schema({
   email: String,
   password: String,
   phone: String,
+  mark: { type: Number, required: true },
+  isRegistered: { type: Boolean, default: false },
   projectSelected: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Projectlist",
     default: null,
   },
-  weeklySubmissionData: [
-    weeklySubmissionSchema
-  ],
+  weeklySubmissionData: [weeklySubmissionSchema],
   // finalProjectReport: {
   //   submissionType: {
   //     type: String,
@@ -129,7 +129,7 @@ const studentSchema = mongoose.Schema({
   //     type: Date,
   //     default: null,
   //   },
-  //   submissionStatus: { 
+  //   submissionStatus: {
   //     type: Boolean,
   //     default: false,
   //   },
@@ -141,16 +141,14 @@ const studentSchema = mongoose.Schema({
   //     type: String,
   //     default: "",
   //   },
-  //   projectId: { 
+  //   projectId: {
   //     type: mongoose.Schema.Types.ObjectId,
   //     ref: 'Projectlist',
   //   }
   // },
-  finalProjectReport :finalProjectReport,
-vivaVoce: vivaVoceSchema
-  
+  finalProjectReport: finalProjectReport,
+  vivaVoce: vivaVoceSchema,
 });
-
 
 const studentData = mongoose.model("student", studentSchema);
 module.exports = studentData;
