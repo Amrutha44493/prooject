@@ -61,7 +61,7 @@ const StudentDashboard = () => {
   };
 
   const handleSelect = async (projectId) => {
-    const confirmSelection = window.confirm("Are you sure you want to select this project?");
+    const confirmSelection = window.confirm("Are you sure you want to select this project? You won't be able to select any other project later.");
     if (!confirmSelection) return;
 
     const token = localStorage.getItem('token');
