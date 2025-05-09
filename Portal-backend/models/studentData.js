@@ -107,7 +107,7 @@ const studentSchema = mongoose.Schema({
   email: String,
   password: String,
   phone: String,
-  mark: { type: Number, required: true },
+  mark: { type: Number },
   isRegistered: { type: Boolean, default: false },
   projectSelected: {
     type: mongoose.Schema.Types.ObjectId,

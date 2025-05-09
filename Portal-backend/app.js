@@ -52,9 +52,7 @@ const upload = multer({
     cb(new Error("Only PDF, DOC, DOCX, ZIP, and RAR files are allowed"));
   },
     
-   
-    cb(new Error('Only PDF, DOC, DOCX, ZIP, and RAR files are allowed for weekly submissions'));
-  }
+
 });
 
 const finalReportStorage = new CloudinaryStorage({
@@ -98,7 +96,7 @@ app.use("/api/reference", referenceRoute);
 app.use('/api/final-reports', finalProjectRoutes); 
 app.use('/api/forum', queryRoutes);
 app.use("/api/submit", studentSubmission);
-
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

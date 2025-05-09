@@ -137,43 +137,39 @@ const FinalProjectSubmission = () => {
             return;
         }
 
-        const formData = new FormData();
-        formData.append('comment', reportComments);
-        formData.append('projectId', selectedProjectId);
-
-        if (selectedFile) {
-            formData.append('file', selectedFile);
-        } else if (!reportLink) {
-            setSubmissionStatus({
-                severity: 'error',
-                message: 'Please upload a file or provide a link.',
-            });
-            setIsSubmitting(false);
-            return;
-        }
-
         try {
             const apiUrl = `http://localhost:5000/api/final-reports/student/${studentId}/final-report`;
-            const requestOptions = {
-                method: 'POST',
-                headers: { 'x-auth-token': token },
-            };
+            const headers = { 'x-auth-token': token };
+            let formDataOrJson;
+            let contentType;
 
-            if (selectedFile) {
-                requestOptions.body = formData;
-            } else {
-                requestOptions.headers['Content-Type'] = 'application/json';
-                requestOptions.body = JSON.stringify({
+            if (activeTab === 0 && selectedFile) {
+                formDataOrJson = new FormData();
+                formDataOrJson.append('comment', reportComments);
+                formDataOrJson.append('projectId', selectedProjectId);
+                formDataOrJson.append('file', selectedFile);
+                contentType = 'multipart/form-data';
+            } else if (activeTab === 1 && reportLink) {
+                formDataOrJson = {
                     reportLink,
                     comment: reportComments,
                     projectId: selectedProjectId,
+                };
+                contentType = 'application/json';
+                headers['Content-Type'] = contentType;
+            } else {
+                setSubmissionStatus({
+                    severity: 'error',
+                    message: 'Please upload a file or provide a link.',
                 });
+                setIsSubmitting(false);
+                return;
             }
 
-            const response = await fetch(apiUrl, requestOptions);
-            const data = await response.json();
+            const response = await axios.post(apiUrl, formDataOrJson, { headers });
+            const data = response.data;
 
-            if (response.ok) {
+            if (response.status === 200) {
                 setSubmissionStatus({
                     severity: 'success',
                     message: data.message || 'Final report submitted successfully!',
@@ -196,7 +192,6 @@ const FinalProjectSubmission = () => {
             setIsSubmitting(false);
         }
     };
-
     const handleTabChange = (event, newValue) => {
         setActiveTab(newValue);
     };
@@ -241,7 +236,7 @@ const FinalProjectSubmission = () => {
 
                         {!canSubmitFinalReport && isSubmissionOpen && (
                             <Alert severity="warning" sx={{ mt: 2 }}>
-                                You need to complete at least 4 weekly submissions before you can submit the final report.
+                                You need to complete weekly submissions before you can submit the final report.
                                 (Current: {weeklySubmissionsCount}/4)
                             </Alert>
                         )}
@@ -326,7 +321,7 @@ const FinalProjectSubmission = () => {
                 ) : (
                     <Box>
                         <Alert severity="success" sx={{ mb: 3 }}>
-                            ✅ Final report submitted successfully! Waiting for review.
+                            Final report submitted successfully! Waiting for review.
                         </Alert>
 
                         {finalReportData && (

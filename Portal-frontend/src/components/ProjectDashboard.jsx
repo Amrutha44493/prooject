@@ -15,11 +15,15 @@ import FinalProjectSubmission from "./FinalProjectSubmission";
 import DiscussionForum from "./DiscussionForum";
 import { useParams } from 'react-router-dom';
 import FeedbackMark from "./FeedbackMark";
+import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 const ProjectDashboard = () => {
-  const { projectId: projectIdFromRoute } = useParams();
+  const today = new Date().getDay();
+    const isWeekend = today === 6 || today === 0;
+    const { projectId: projectIdFromRoute } = useParams(); // Get projectId from URL
+    const [isAddSubmission, setIsAddSubmission] = useState(false);
+    const [projectId, setProjectId] = useState(projectIdFromRoute); // Set projectId from route param
   const [value, setValue] = useState(0);
-  const [projectId, setProjectId] = useState(projectIdFromRoute);
-
+  
   useEffect(() => {
     console.log("ProjectDashboard projectId:", projectId);
   }, [projectId]);
@@ -64,17 +68,7 @@ const ProjectDashboard = () => {
           </Box>
         </Paper>
       </Box>
-      <Typography
-                  disabled={isWeekend}
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    color: "warning.main",
-                  }}
-                >
-                  <WarningAmberIcon sx={{pr:1}}/>  Weekly submission will be available only
-                  during weekends.
-                </Typography>
+    
     </div>
   );
 };
