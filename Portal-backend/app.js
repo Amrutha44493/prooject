@@ -96,6 +96,9 @@ app.use("/api/reference", referenceRoute);
 app.use('/api/final-reports', finalProjectRoutes); 
 app.use('/api/forum', queryRoutes);
 app.use("/api/submit", studentSubmission);
+app.get("/", (req, res) => {
+  res.send("API is running");
+});
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
