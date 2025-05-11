@@ -6,7 +6,7 @@ import StudentDashboard from "./components/StudentDashboard";
 import SignUp from "./components/SignUp";
 import Home from "./components/Home";
 import ProjectDashboard from "./components/ProjectDashboard";
-import AddSubmission from "./components/WeeklySubmission/AddSubmission"; 
+import WeeklySubmission from "./components/WeeklySubmission";
 
 function App() {
   return (
@@ -34,7 +34,7 @@ function App() {
         path="/addsubmission"
         element={
           <PrivateRoute>
-            <AddSubmission />
+            <WeeklySubmission />
           </PrivateRoute>
         }
       />

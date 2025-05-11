@@ -120,7 +120,7 @@ const VivaVoce = () => {
         </Typography>
 
         {!canSubmit && !hasSubmitted && (
-          <Alert severity="warning" sx={{ mb: 2 }}>
+          <Alert  severity="warning" sx={{ mb: 2 }}>
             You must submit your project report before you can submit the viva voce.
           </Alert>
         )}

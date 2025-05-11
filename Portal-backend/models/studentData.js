@@ -1,6 +1,4 @@
 const mongoose = require("mongoose");
-const ReferenceMaterial = require("./ReferenceMaterial");
-// const weeklySubmissionData = require("./weeklySubmissionData");
 const weeklySubmissionSchema = mongoose.Schema({
   comment: {
     type: String,

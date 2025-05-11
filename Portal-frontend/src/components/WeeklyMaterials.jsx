@@ -1,168 +1,190 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { jwtDecode } from 'jwt-decode';
 import {
+  Box,
+  Grid,
+  Typography,
   Accordion,
   AccordionSummary,
   AccordionDetails,
-  Typography,
-  TextField,
-  Box,
-  Grid
-} from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
-import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
-import YouTubeIcon from '@mui/icons-material/YouTube';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import LanguageIcon from '@mui/icons-material/Language';
-import axios from 'axios';
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Paper,
+  Button,
+  Divider
+} from "@mui/material";
+import {
+  Link as LinkIcon,
+  InsertDriveFile as FileIcon,
+  Download as DownloadIcon
+} from "@mui/icons-material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const WeeklyMaterials = () => {
   const [availableWeeks, setAvailableWeeks] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredWeeks, setFilteredWeeks] = useState([]);
   const [weekDetails, setWeekDetails] = useState({});
+  const [projectId, setProjectId] = useState(null);
 
+  // Fetch student's project
   useEffect(() => {
-    const fetchWeeks = async () => {
+    const fetchProject = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/reference/weeks');
-        if (Array.isArray(res.data)) {
-          setAvailableWeeks(res.data);
-          setFilteredWeeks(res.data);
-        }
+        const token = localStorage.getItem("token");
+        const decoded = jwtDecode(token);
+        const studentId = decoded?.student?.id;
+        const res = await axios.get(`http://localhost:5000/api/projects/student/${studentId}`);
+        setProjectId(res.data._id);
       } catch (err) {
-        console.error('Error fetching weeks:', err);
+        console.error("Error fetching project:", err);
       }
     };
-
-    fetchWeeks();
+    fetchProject();
   }, []);
+
+  // Fetch reference materials
+  useEffect(() => {
+    const fetchMaterials = async () => {
+      if (!projectId) return;
+      try {
+        const { data } = await axios.get(`http://localhost:5000/api/reference/${projectId}`);
+        const cleanedWeeks = data.referenceMaterials.map(item => ({
+          ...item,
+          title: item.title.replace(`Week ${item.week}:`, '').trim()
+        }));
+        const uniqueWeeks = [...new Map(cleanedWeeks.map(item => [item.week, item])).values()]
+          .sort((a, b) => a.week - b.week);
+        setAvailableWeeks(uniqueWeeks);
+        setFilteredWeeks(uniqueWeeks);
+      } catch (err) {
+        console.error("Error fetching reference materials:", err);
+      }
+    };
+    fetchMaterials();
+  }, [projectId]);
 
   const handleSearch = (e) => {
     const value = e.target.value;
     setSearchTerm(value);
-    setFilteredWeeks(availableWeeks.filter((week) =>
-      week.toString().includes(value)
-    ));
+    setFilteredWeeks(
+      value ? availableWeeks.filter(week => week.week.toString() === value) : availableWeeks
+    );
   };
 
   const handleAccordionChange = async (weekNumber) => {
     if (!weekDetails[weekNumber]) {
       try {
-        const res = await axios.get(`http://localhost:5000/api/reference/week/${weekNumber}`);
-        if (res.data && res.data.length > 0) {
-          const data = res.data[0];
-          setWeekDetails((prevDetails) => ({
-            ...prevDetails,
-            [weekNumber]: data,
-          }));
-        }
+        const { data } = await axios.get(`http://localhost:5000/api/reference/${projectId}`);
+        const weekData = data.referenceMaterials.find(item => item.week === weekNumber);
+        if (weekData) setWeekDetails(prev => ({ ...prev, [weekNumber]: weekData }));
       } catch (err) {
-        console.error(`Error fetching details for week ${weekNumber}:`, err);
+        console.error(`Error fetching week ${weekNumber} details:`, err);
       }
     }
   };
 
-  const getIcon = (url) => {
-    if (url.includes('.pdf')) {
-      return <PictureAsPdfIcon sx={{ color: '#d32f2f' }} />;
-    } else if (url.includes('youtube.com') || url.includes('youtu.be')) {
-      return <YouTubeIcon sx={{ color: '#FF0000' }} />;
-    } else if (url.includes('linkedin.com')) {
-      return <LinkedInIcon sx={{ color: '#0077b5' }} />;
-    } else {
-      return <LanguageIcon sx={{ color: '#1976d2' }} />;
-    }
-  };
+  const renderContent = (weekDetail) => (
+    <Paper sx={{
+      p: 2,
+      mt: 1,
+      backgroundColor: '#f7f8f9',
+      borderLeft: '4px solid #b4b8bc'
+    }}>
+      <Typography variant="body1" paragraph>
+        {weekDetail.description}
+      </Typography>
+      <Divider sx={{ my: 2 }} />
+      {weekDetail.submissionType === 'link' && weekDetail.link ? (
+        <Button
+          href={weekDetail.link}
+          target="_blank"
+          startIcon={<LinkIcon />}
+          sx={{ color: '#1976d2' }}
+        >
+          Reference Link
+        </Button>
+      ) : weekDetail.submissionType === 'file' && weekDetail.cloudinaryUrl ? (
+        <Button
+          href={weekDetail.cloudinaryUrl}
+          target="_blank"
+          startIcon={<DownloadIcon />}
+          sx={{ color: '#1976d2' }}
+          download
+        >
+          Download Material
+        </Button>
+      ) : (
+        <Typography variant="body2" color="text.secondary">
+          No materials available for this week
+        </Typography>
+      )}
+    </Paper>
+  );
 
   return (
-    <Box sx={{ padding: 2 }}>
-      <Box
-        sx={{
-          padding: 3,
-          borderRadius: 3,
-          boxShadow: 5,
-          backgroundColor: '#ffffff',
-          marginTop: 10, 
-          width: '75%', 
-          mx: 'auto',   
-        }}
-      >
-        {/* Heading + Search Bar */}
-        <Grid container justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
-          <Typography variant="h5">Weekly Reference Materials</Typography>
-          <TextField
-            label="Search Weeks"
-            variant="outlined"
-            size="small"
-            placeholder="weeks like 1, 2..."
-            value={searchTerm}
-            onChange={handleSearch}
-            sx={{ maxWidth: 200 }}
-          />
+    <Box sx={{ p: 2 }}>
+      <Box sx={{ 
+        p: 3, 
+        borderRadius: 2, 
+        boxShadow: 3, 
+        bgcolor: 'background.paper',
+        mt: 8,
+        width: '95%',
+        maxWidth: '950px',
+        mx: 'auto'
+      }}>
+        <Grid container justifyContent="space-between" alignItems="center" sx={{ mb: 3 }}>
+          <Typography variant="h5" sx={{ fontWeight: 600 }}>
+          </Typography>
+          <FormControl sx={{ minWidth: 150 }} size="small">
+            <InputLabel>Select Week</InputLabel>
+            <Select
+              value={searchTerm}
+              onChange={handleSearch}
+              label="Select Week"
+            >
+              <MenuItem value="">All Weeks</MenuItem>
+              {availableWeeks.map((week) => (
+                <MenuItem key={week.week} value={week.week.toString()}>
+                  Week {week.week}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </Grid>
 
         {filteredWeeks.length === 0 ? (
-          <Typography>No weeks available</Typography>
+          <Typography>No reference materials available</Typography>
         ) : (
-          filteredWeeks.map((weekNumber) => (
-            <Accordion
-              key={weekNumber}
-              onChange={() => handleAccordionChange(weekNumber)}
-              sx={{
-                mb: 2,
-                border: 'none',
-                borderRadius: 2,
-                boxShadow: 2,
-                width: '100%', 
+          filteredWeeks.map((week) => (
+            <Accordion 
+              key={week.week} 
+              onChange={() => handleAccordionChange(week.week)}
+              sx={{ 
+                mb: 1.5,
+                backgroundColor: 'rgba(48,117,137,255)',
+                color: 'white',
+                '&:hover': {
+                  backgroundColor: 'rgba(38,107,127,255)'
+                }
               }}
             >
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                sx={{
-                  backgroundColor: '#f6f6f6',
-                  color: 'black',
-                  '&:hover': {
-                    backgroundColor: '#a9a9a9',
-                    color: 'white',
-                  },
-                }}
+              <AccordionSummary 
+                expandIcon={<ExpandMoreIcon sx={{ color: 'white' }} />}
               >
-                <Typography variant="h6">
-                  Week {weekNumber}: {weekDetails[weekNumber]?.title}
+                <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+                  Week {week.week}: {week.title}
                 </Typography>
               </AccordionSummary>
-              <AccordionDetails
-                sx={{
-                  backgroundColor: '#f5f5f5',
-                  color: '#000',
-                  padding: 2,
-                }}
-              >
-                {weekDetails[weekNumber] ? (
-                  <>
-                    <Typography variant="body2" sx={{ mb: 1 }}>
-                      {weekDetails[weekNumber].description}
-                    </Typography>
-                    <Box display="flex" flexDirection="column" gap={1}>
-  {weekDetails[weekNumber]?.fileUrl?.split(',').map((link, index) => (
-    <Box key={index} display="flex" alignItems="center" gap={1}>
-      {getIcon(link)}
-      <a
-        href={link.trim()}
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{ color: '#4caf50', wordBreak: 'break-word' }}
-      >
-        {link.trim()}
-      </a>
-    </Box>
-  ))}
-</Box>
-
-                  </>
+              <AccordionDetails>
+                {weekDetails[week.week] ? (
+                  renderContent(weekDetails[week.week])
                 ) : (
-                  <Typography variant="body2">Loading...</Typography>
+                  <Typography>Loading materials...</Typography>
                 )}
               </AccordionDetails>
             </Accordion>
@@ -174,5 +196,3 @@ const WeeklyMaterials = () => {
 };
 
 export default WeeklyMaterials;
-
-

@@ -19,6 +19,7 @@ const storage = new CloudinaryStorage({
 
 const finalReportUpload = multer({ storage: storage });
 
+// Route: POST /student/:studentId/final-report
 router.post('/student/:studentId/final-report', auth, finalReportUpload.single('file'), async (req, res) => {
   try {
     console.log('Request Body:', req.body);
@@ -64,6 +65,22 @@ router.post('/student/:studentId/final-report', auth, finalReportUpload.single('
   } catch (error) {
     console.error('Error submitting final report:', error);
     res.status(500).json({ message: 'Server error while submitting final report.' });
+  }
+});
+
+router.get('/student/:studentId', auth, async (req, res) => {
+  try {
+    const student = await studentData.findById(req.params.studentId).select('finalProjectReport');
+    if (!student) {
+      return res.status(404).json({ message: 'Student not found' });
+    }
+
+    const finalProjectReport = student.finalProjectReport || null;
+
+    res.status(200).json({ finalProjectReport });
+  } catch (error) {
+    console.error('Error fetching final report:', error);
+    res.status(500).json({ message: 'Server error while fetching final report.' });
   }
 });
 
