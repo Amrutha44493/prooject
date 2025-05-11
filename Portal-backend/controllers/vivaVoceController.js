@@ -49,11 +49,19 @@ const uploadVivaVoce = async (req, res) => {
     }
 
     // Check if project report has been submitted
-    if (!student.projectReport) {
-      return res.status(400).json({ 
-        message: 'You must submit your project report before submitting the viva voce.' 
-      });
-    }
+    // if (!student.projectReport) {
+    //   return res.status(400).json({ 
+    //     message: 'You must submit your project report before submitting the viva voce.' 
+    //   });
+    // }
+
+    // Check if final project report has been submitted
+if (!student.finalProjectReport) {
+  return res.status(400).json({ 
+    message: 'You must submit your final project report before submitting the viva voce.' 
+  });
+}
+
 
     // Check if viva voce has already been submitted
     if (student.vivaVoce) {
@@ -99,11 +107,17 @@ const getVivaVoce = async (req, res) => {
       return res.status(404).json({ message: 'Student not found' });
     }
 
+    // res.status(200).json({
+    //   vivaVoce: student.vivaVoce,
+    //   projectReportSubmitted: !!student.projectReport,
+    //   canSubmitVivaVoce: !!student.projectReport && !student.vivaVoce
+    // });
     res.status(200).json({
-      vivaVoce: student.vivaVoce,
-      projectReportSubmitted: !!student.projectReport,
-      canSubmitVivaVoce: !!student.projectReport && !student.vivaVoce
-    });
+  vivaVoce: student.vivaVoce,
+  projectReportSubmitted: !!student.finalProjectReport,
+  canSubmitVivaVoce: !!student.finalProjectReport && !student.vivaVoce
+});
+
   } catch (error) {
     res.status(500).json({ message: 'Error fetching viva voce', error: error.message });
   }

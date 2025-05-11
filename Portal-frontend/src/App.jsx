@@ -6,14 +6,17 @@ import StudentDashboard from "./components/StudentDashboard";
 import SignUp from "./components/SignUp";
 import Home from "./components/Home";
 import ProjectDashboard from "./components/ProjectDashboard";
-import WeeklySubmission from "./components/WeeklySubmission";
 
+import WeeklySubmission from "./components/WeeklySubmission";
+import LoginController from "./components/LoginController";
+import "./App.css";
 function App() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<SignUp />} />
+      {/* <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<SignUp />} /> */}
+      <Route path="/logincontroller" element={<LoginController />} />
       <Route
         path="/dashboard"
         element={

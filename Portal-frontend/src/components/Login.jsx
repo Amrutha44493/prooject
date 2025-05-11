@@ -11,7 +11,7 @@ import {
   Alert,
 } from '@mui/material';
 
-const Login = () => {
+const Login = ({onswitchForm}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -62,7 +62,8 @@ const Login = () => {
       container
       justifyContent="center"
       alignItems="center"
-      style={{ minHeight: '100vh', backgroundColor: '#f5f5f5' }}
+      // style={{ minHeight: '100vh', backgroundColor: '#f5f5f5' }}
+      style={{ minHeight: '97vh'}}
     >
       <Grid item xs={10} sm={6} md={4}>
         <Paper elevation={3} sx={{ p: 4 }}>
@@ -103,7 +104,10 @@ const Login = () => {
             </Button>
           </form>
           <Typography sx={{ mt: 2 }}>
-            <Link to={'/signup'} style={{ color: 'grey', textDecoration: 'none' }}>
+            <Link to={'/logincontroller'} style={{ color: 'grey', textDecoration: 'none' }} onClick={(e) => {
+              e.preventDefault();
+              onswitchForm();
+            }}>
              <i>New User? Click here</i> 
             </Link>
           </Typography>

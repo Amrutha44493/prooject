@@ -11,7 +11,8 @@ const StudentNav = () => {
   const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.removeItem('token'); 
-    navigate("/login")
+    localStorage.removeItem('studentId')
+    navigate("/logincontroller")
   };
   return (
    <Box sx={{ flexGrow: 1 }}>

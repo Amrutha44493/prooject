@@ -14,6 +14,7 @@ const pdfRoutes = require("./routes/pdfRoutes");
 const queryRoutes = require("./routes/queryRoutes");
 const vivaVoceRoutes = require("./routes/vivaVoceRoutes");
 const finalProjectRoutes = require('./routes/finalProjectRoutes'); // Import the final project routes
+const studentSubmission = require("./routes/studentSubmission")
 
 const app = express();
 
@@ -48,6 +49,9 @@ const upload = multer({
     if (mimetype && extname) {
       return cb(null, true);
     }
+    cb(new Error("Only PDF, DOC, DOCX, ZIP, and RAR files are allowed"));
+  },
+    
    
     cb(new Error('Only PDF, DOC, DOCX, ZIP, and RAR files are allowed for weekly submissions'));
   }
@@ -93,7 +97,7 @@ app.use("/api/reference", referenceRoute);
 
 app.use('/api/final-reports', finalProjectRoutes); 
 app.use('/api/forum', queryRoutes);
-const PORT = process.env.PORT;
+app.use("/api/submit", studentSubmission);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

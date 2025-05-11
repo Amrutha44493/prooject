@@ -14,7 +14,7 @@ import VivaVoce from "./VivaVoce";
 import FinalProjectSubmission from "./FinalProjectSubmission";
 import DiscussionForum from "./DiscussionForum";
 import { useParams } from 'react-router-dom';
-
+import FeedbackMark from "./FeedbackMark";
 const ProjectDashboard = () => {
   const { projectId: projectIdFromRoute } = useParams();
   const [value, setValue] = useState(0);
@@ -59,9 +59,22 @@ const ProjectDashboard = () => {
             {value === 3 && <FinalProjectSubmission />}
             {value === 4 && <VivaVoce />}
             {value === 5 && <DiscussionForum />}
+
+            {value === 6 && <FeedbackMark />} 
           </Box>
         </Paper>
       </Box>
+      <Typography
+                  disabled={isWeekend}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    color: "warning.main",
+                  }}
+                >
+                  <WarningAmberIcon sx={{pr:1}}/>  Weekly submission will be available only
+                  during weekends.
+                </Typography>
     </div>
   );
 };
